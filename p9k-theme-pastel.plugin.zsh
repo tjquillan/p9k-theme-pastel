@@ -3,6 +3,7 @@ if [[ -n $DISPLAY ]]; then
     typeset -gAh __PASTEL_COLORS=(
         red 009
         green 010
+        brightgreen 041
         yellow 011
         blue 012
     )
@@ -11,6 +12,7 @@ else
     typeset -gAh __PASTEL_COLORS=(
         red 001
         green 002
+        brightgreen 002
         yellow 003
         blue 004
     )
@@ -19,7 +21,6 @@ else
 fi
 
 _pastel_config_p9k() {
-    # POWERLEVEL9K_MODE=nerdfont-complete
     POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(user dir vcs virtualenv)
     POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status)
 
@@ -71,7 +72,7 @@ _pastel_config_p9k() {
     POWERLEVEL9K_CHANGESET_HASH_LENGTH=6
 
     POWERLEVEL9K_VCS_CLEAN_BACKGROUND='none'
-    POWERLEVEL9K_VCS_CLEAN_FOREGROUND='076'
+    POWERLEVEL9K_VCS_CLEAN_FOREGROUND="$__PASTEL_COLORS[brightgreen]"
     POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='none'
     POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='005'
     POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='none'
