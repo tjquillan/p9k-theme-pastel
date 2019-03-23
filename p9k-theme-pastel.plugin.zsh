@@ -11,6 +11,7 @@ _pastel_compat_mode_fancy () {
         yellow 011
         blue 012
         purple 134
+        grey 244
     )
     PROMPT_PREFIX_CHAR="❯"
 }
@@ -23,6 +24,7 @@ _pastel_compat_mode_compat() {
         yellow 003
         blue 004
         purple 005
+        grey 008
     )
     PROMPT_PREFIX_CHAR=">"
     POWERLEVEL9K_IGNORE_TERM_COLORS=true
@@ -91,8 +93,8 @@ _pastel_config_vcs_p10k() {
 }
 
 _pastel_config_vcs() {
-    POWERLEVEL9K_VCS_LOADING_FOREGROUND=244
-    POWERLEVEL9K_VCS_LOADING_ACTION_FOREGROUND=244
+    POWERLEVEL9K_VCS_LOADING_FOREGROUND="$__PASTEL_COLORS[grey]"
+    POWERLEVEL9K_VCS_LOADING_ACTION_FOREGROUND="$POWERLEVEL9K_VCS_LOADING_FOREGROUND"
     POWERLEVEL9K_VCS_CLEAN_FOREGROUND="$__PASTEL_COLORS[brightgreen]"
     POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND="$__PASTEL_COLORS[red]"
     POWERLEVEL9K_VCS_MODIFIED_FOREGROUND="$__PASTEL_COLORS[yellow]"
