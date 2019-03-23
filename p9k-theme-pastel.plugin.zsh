@@ -1,8 +1,9 @@
 # Allow special featueres for powerlevel10k
 [ -v PASTEL_THEME_MODE ] || PASTEL_THEME_MODE="p9k"
+[ -v PASTEL_COMPAT_MODE ] || PASTEL_COMPAT_MODE="auto"
 
-# Set different config if in tty
-if [[ -n $DISPLAY ]]; then
+
+_pastel_compat_mode_fancy () {
     typeset -gAh __PASTEL_COLORS=(
         red 009
         green 010
@@ -12,7 +13,9 @@ if [[ -n $DISPLAY ]]; then
         purple 134
     )
     PROMPT_PREFIX_CHAR="❯"
-else
+}
+
+_pastel_compat_mode_compat() {
     typeset -gAh __PASTEL_COLORS=(
         red 001
         green 002
@@ -23,6 +26,22 @@ else
     )
     PROMPT_PREFIX_CHAR=">"
     POWERLEVEL9K_IGNORE_TERM_COLORS=true
+}
+
+
+if [[ $PASTEL_COMPAT_MODE == "auto" ]]; then
+    # Set different config if in tty
+    if [[ -n $DISPLAY ]]; then
+        _pastel_compat_mode_fancy
+    else
+        _pastel_compat_mode_compat
+    fi
+else
+    if typeset -f _pastel_compat_mode_$PASTEL_COMPAT_MODE > /dev/null; then
+        _pastel_compat_mode_$PASTEL_COMPAT_MODE
+    else
+        echo "Invalid Pastel Compat Mode: '$PASTEL_COMPAT_MODE'"
+    fi
 fi
 
 _pastel_config_user() {
