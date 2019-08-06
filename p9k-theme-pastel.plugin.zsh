@@ -67,7 +67,7 @@ _pastel_config_p10k() {
     typeset -g POWERLEVEL9K_{LEFT,RIGHT}_{LEFT,RIGHT}_WHITESPACE=  # no surrounding whitespace
     typeset -g POWERLEVEL9K_VISUAL_IDENTIFIER_EXPANSION=           # disable segment icons
 
-    # typeset -g {PS2,PS3}="%(?.%F{$__PASTEL_COLORS[blue]}$PASTEL_PROMPT_CHAR%f.%F{$__PASTEL_COLORS[red]}$PASTEL_PROMPT_CHAR%f) "
+    typeset -g {PS2,PS3}="%(?.%F{$__PASTEL_COLORS[blue]}$PASTEL_PROMPT_CHAR%f.%F{$__PASTEL_COLORS[red]}$PASTEL_PROMPT_CHAR%f) "
 }
 
 _pastel_config() {
