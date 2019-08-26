@@ -1,5 +1,4 @@
 # Allow special featueres for powerlevel10k
-[ -v PASTEL_THEME_MODE ] || PASTEL_THEME_MODE="p9k"
 [ -v PASTEL_COMPAT_MODE ] || PASTEL_COMPAT_MODE="auto"
 
 local LC_ALL=C.UTF-8
@@ -10,12 +9,14 @@ _pastel_compat_mode_fancy () {
         green 010
         brightgreen 041
         yellow 011
+        orange 003
         blue 012
         purple 134
         grey 244
     )
-    typeset -g PASTEL_PROMPT_CHAR="❯"
-    typeset -g PASTEL_PROMPT_CHAR_INV="❮"
+    typeset -g PASTEL_PROMPT_CHAR_INS="❯"
+    typeset -g PASTEL_PROMPT_CHAR_CMD="❮"
+    typeset -g PASTEL_PROMPT_CHAR_VIS="Ⅴ"
 }
 
 _pastel_compat_mode_compat() {
@@ -24,15 +25,37 @@ _pastel_compat_mode_compat() {
         green 002
         brightgreen 002
         yellow 003
+        orange 003
         blue 004
         purple 005
         grey 008
     )
-    typeset -g PASTEL_PROMPT_CHAR=">"
-    typeset -g PASTEL_PROMPT_CHAR_INV="<"
+    typeset -g PASTEL_PROMPT_CHAR_INS=">"
+    typeset -g PASTEL_PROMPT_CHAR_CMD="<"
+    typeset -g PASTEL_PROMPT_CHAR_VIS="V"
     typeset -g POWERLEVEL9K_IGNORE_TERM_COLORS=true
 }
 
+_pastel_prompt_char_precmd() {
+    echo $P9K_PROMPT_CHAR_STATE
+
+    case $P9K_PROMPT_CHAR_STATE in
+    OK_VIINS | OK_VICMD | OK_VIVIS)
+        local char_color="$__PASTEL_COLORS[blue]"
+    ;;
+    ERROR_VIINS | ERROR_VICMD | ERROR_VIVIS)
+        local char_color="$__PASTEL_COLORS[red]"
+    ;;
+    *)
+        local char_color="$__PASTEL_COLORS[blue]"
+    ;;
+    esac
+
+    typeset -g PS2="%F{$char_color}%_$PASTEL_PROMPT_CHAR_INS%f "
+    typeset -g PS3="%F{$char_color}$PASTEL_PROMPT_CHAR_INS%f "
+}
+
+# precmd_functions+=_pastel_prompt_char_precmd
 
 if [[ $PASTEL_COMPAT_MODE == "auto" ]]; then
     # Set different config if in tty
@@ -49,51 +72,24 @@ else
     fi
 fi
 
+unset -m 'POWERLEVEL9K_*'
+
+typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs virtualenv newline prompt_char)
+typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status)
+
+typeset -g POWERLEVEL9K_BACKGROUND=""                            # transparent background
+typeset -g POWERLEVEL9K_{LEFT,RIGHT}_{LEFT,RIGHT}_WHITESPACE=""  # no surrounding whitespace
+typeset -g POWERLEVEL9K_{LEFT,RIGHT}_SUBSEGMENT_SEPARATOR=" "    # separate segments with a space
+typeset -g POWERLEVEL9K_{LEFT,RIGHT}_SEGMENT_SEPARATOR=""        # no end-of-line symbol
+typeset -g POWERLEVEL9K_VISUAL_IDENTIFIER_EXPANSION=""           # disable segment icons
+typeset -g POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
+
+typeset -g PS2="%F{%(?.$__PASTEL_COLORS[blue].$__PASTEL_COLORS[red])}%_$PASTEL_PROMPT_CHAR_INS%f "
+typeset -g PS3="%F{%(?.$__PASTEL_COLORS[blue].$__PASTEL_COLORS[red])}$PASTEL_PROMPT_CHAR_INS%f "
+typeset -gx PS4="%F{$__PASTEL_COLORS[blue]}%N:%i$PASTEL_PROMPT_CHAR_INS%f "
+
 source "$(dirname $0)/p9k-elements.zsh"
 
-
-_pastel_config_p9k() {
-    typeset -g POWERLEVEL9K_WHITESPACE_BETWEEN_{LEFT,RIGHT}_SEGMENTS=  # no surrounding whitespace
-
-    typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-    typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=
-    typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%(?.%F{$__PASTEL_COLORS[blue]}$PASTEL_PROMPT_CHAR%f.%F{$__PASTEL_COLORS[red]}$PASTEL_PROMPT_CHAR%f) "
-    typeset -g {PS2,PS3}="$POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX"
-}
-
-_pastel_config_p10k() {
-    POWERLEVEL9K_LEFT_PROMPT_ELEMENTS+=(newline prompt_char)
-    typeset -g POWERLEVEL9K_BACKGROUND=                            # transparent background
-    typeset -g POWERLEVEL9K_{LEFT,RIGHT}_{LEFT,RIGHT}_WHITESPACE=  # no surrounding whitespace
-    typeset -g POWERLEVEL9K_VISUAL_IDENTIFIER_EXPANSION=           # disable segment icons
-
-    typeset -g {PS2,PS3}="%(?.%F{$__PASTEL_COLORS[blue]}$PASTEL_PROMPT_CHAR%f.%F{$__PASTEL_COLORS[red]}$PASTEL_PROMPT_CHAR%f) "
-}
-
-_pastel_config() {
-    typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(user dir vcs virtualenv)
-    typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status)
-
-    typeset -g POWERLEVEL9K_{LEFT,RIGHT}_SUBSEGMENT_SEPARATOR=" "  # separate segments with a space
-    typeset -g POWERLEVEL9K_{LEFT,RIGHT}_SEGMENT_SEPARATOR=        # no end-of-line symbol
-
-    typeset -g POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
-
-    if typeset -f _pastel_config_$PASTEL_THEME_MODE > /dev/null; then
-        _pastel_config_$PASTEL_THEME_MODE
-    fi
-
-    for x in $POWERLEVEL9K_LEFT_PROMPT_ELEMENTS $POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS; do 
-        if typeset -f _pastel_config_$x > /dev/null; then
-            _pastel_config_$x
-        fi
-    done
-}
-
-_pastel_init() {
-    unset -m 'POWERLEVEL9K_*'
-    _pastel_config
-    if typeset -f _pastel_config_custom > /dev/null; then
+if typeset -f _pastel_config_custom > /dev/null; then
         _pastel_config_custom
-    fi
-}
+fi
