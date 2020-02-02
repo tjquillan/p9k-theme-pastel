@@ -1,14 +1,22 @@
 # p9k-theme-pastel
 
-p9k-theme-pastel is a theme for the [powerlevel9k](https://github.com/bhilburn/powerlevel9k) prompt.
-
-It also has special features for [powerlevel10k](https://github.com/romkatv/powerlevel10k) which is an accelerated version of powerlevel9k
-which has some additional features. **I highly reccommend you check it out!**
+p9k-theme-pastel is a theme for the [powerlevel10k](https://github.com/romkatv/powerlevel10k) prompt that puts an emphasis on simplcity
+while still getting important information across.
 
 ## Installation / Usage
 
-### Zplugin
+### Zinit (Formerly Zplugin)
 
-Installation: `zplugin light iboyperson/p9k-theme-pastel`
+Installation: `zinit light-mode for $HOME/projects/p9k-theme-pastel`
 
-Usage: `zplugin ice atinit"_pastel_init"; zplugin light romkatv/powerlevel10k`
+## Useage outside of a desktop
+
+p9k-theme-pastel does its best to keep things compatible by changing characters used when no DISPLAY environemnt varialbe is present.
+For colors to work properly however you will need to ensure your term supports 256 colors.
+This can be done with something like this in `.zlogin`:
+
+```zsh
+if (( ! $? && ${term_colors:-0} < 256 )); then
+  TERM="xterm-256color"
+fi
+```
