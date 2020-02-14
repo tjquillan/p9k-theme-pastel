@@ -3,6 +3,8 @@
 p9k-theme-pastel is a theme for the [powerlevel10k](https://github.com/romkatv/powerlevel10k) prompt that puts an emphasis on simplcity
 while still getting important information across.
 
+![](Screenshot.png)
+
 ## Installation / Usage
 
 ### Zinit (Formerly Zplugin)
