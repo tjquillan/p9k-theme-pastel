@@ -8,7 +8,8 @@ p9k-theme-pastel is a theme for the [powerlevel10k](https://github.com/romkatv/p
 
 ### Zinit (Formerly Zplugin)
 
-Add `zinit light iboyperson/p9k-theme-pastel` to `~/.zshrc`.
+If you haven't already, install [powerlevel10k](https://github.com/romkatv/powerlevel10k#zinit).
+Then, add `zinit light iboyperson/p9k-theme-pastel` to `~/.zshrc`.
 
 ## Usage outside of a desktop
 
