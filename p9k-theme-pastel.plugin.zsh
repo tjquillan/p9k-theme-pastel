@@ -119,6 +119,7 @@ _pastel_compat_mode_compat() {
     # vim_shell               # vim shell indicator (:sh)
     # midnight_commander      # midnight commander shell (https://midnight-commander.org/)
     # nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
+    chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)
     # vpn_ip                # virtual private network indicator
     # load                  # CPU load
     # disk_usage            # disk usage
@@ -468,7 +469,7 @@ _pastel_compat_mode_compat() {
       # If local branch name is at most 32 characters long, show it in full.
       # Otherwise show the first 12 … the last 12.
       # Tip: To always show local branch name in full without truncation, delete the next line.
-      (( $#branch > 32 )) && branch[13,-13]="…"  # <-- this line
+      # (( $#branch > 32 )) && branch[13,-13]="…"  # <-- this line
       res+="${clean}${(g::)POWERLEVEL9K_VCS_BRANCH_ICON}${branch//\%/%%}"
     elif [[ -n $VCS_STATUS_TAG ]]; then
       local tag=${(V)VCS_STATUS_TAG}
@@ -816,6 +817,12 @@ _pastel_compat_mode_compat() {
 
   # Custom icon.
   # typeset -g POWERLEVEL9K_NIX_SHELL_VISUAL_IDENTIFIER_EXPANSION='⭐'
+
+  ##################[ chezmoi_shell: chezmoi shell (https://www.chezmoi.io/) ]##################
+  # chezmoi shell color.
+  typeset -g POWERLEVEL9K_CHEZMOI_SHELL_FOREGROUND=33
+  # Custom icon.
+  # typeset -g POWERLEVEL9K_CHEZMOI_SHELL_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   ##################################[ disk_usage: disk usage ]##################################
   # Colors for different levels of disk usage.
